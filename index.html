@@ -1,7 +1,718 @@
-index.html
-style.css
-script.js
-music.mp3
-cover.jpg
-photo1.jpg
-photo2.jpg
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Alanis & Gershom | Wedding Invitation</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Italiana&family=Parisienne&display=swap"
+        rel="stylesheet">
+
+  <style>
+    :root {
+      --cream: #f8f3ea;
+      --soft-cream: #efe5d6;
+      --brown: #4a382f;
+      --gold: #b79355;
+      --white: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--cream);
+      color: var(--brown);
+      font-family: "Cormorant Garamond", serif;
+      overflow-x: hidden;
+    }
+
+    body.invitation-closed {
+      overflow: hidden;
+    }
+
+    /* OPENING SCREEN */
+
+    #openingScreen {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background:
+        radial-gradient(circle at top, rgba(255,255,255,.95), transparent 45%),
+        linear-gradient(145deg, #f8f1e7, #eadbc8);
+      transition: opacity 1s ease, visibility 1s ease;
+    }
+
+    #openingScreen.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .opening-card {
+      width: min(92vw, 480px);
+      padding: 56px 28px;
+      text-align: center;
+      border: 1px solid rgba(183, 147, 85, .45);
+      background: rgba(255,255,255,.73);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 24px 65px rgba(74, 56, 47, .18);
+      position: relative;
+    }
+
+    .opening-card::before,
+    .opening-card::after {
+      content: "❦";
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      color: var(--gold);
+      font-size: 26px;
+    }
+
+    .opening-card::before {
+      top: 20px;
+    }
+
+    .opening-card::after {
+      bottom: 18px;
+      transform: translateX(-50%) rotate(180deg);
+    }
+
+    .monogram {
+      font-family: "Italiana", serif;
+      font-size: 72px;
+      color: var(--gold);
+      line-height: 1;
+      margin-bottom: 18px;
+    }
+
+    .opening-card h1 {
+      font-family: "Parisienne", cursive;
+      font-size: clamp(42px, 10vw, 64px);
+      font-weight: 400;
+      margin-bottom: 8px;
+    }
+
+    .opening-card p {
+      font-size: 18px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 28px;
+    }
+
+    .open-button {
+      border: 1px solid var(--gold);
+      background: var(--gold);
+      color: white;
+      padding: 15px 32px;
+      font-family: "Cormorant Garamond", serif;
+      font-size: 18px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: .3s ease;
+    }
+
+    .open-button:hover {
+      background: transparent;
+      color: var(--gold);
+    }
+
+    .sound-note {
+      display: block;
+      margin-top: 18px;
+      font-size: 14px;
+      letter-spacing: 1px;
+      text-transform: none;
+      opacity: .7;
+    }
+
+    /* HERO */
+
+    .hero {
+      min-height: 100svh;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      text-align: center;
+      padding: 60px 22px;
+      color: white;
+
+      /* Upload your chosen photo as cover.jpg */
+      background-image:
+        linear-gradient(to bottom, rgba(0,0,0,.12), rgba(0,0,0,.68)),
+        url("cover.jpg");
+
+      background-size: cover;
+      background-position: center;
+    }
+
+    .hero-content {
+      max-width: 800px;
+      animation: fadeUp 1.4s ease both;
+    }
+
+    .eyebrow {
+      font-size: 17px;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    .hero h1 {
+      font-family: "Parisienne", cursive;
+      font-size: clamp(58px, 14vw, 110px);
+      line-height: .95;
+      font-weight: 400;
+      text-shadow: 0 4px 20px rgba(0,0,0,.25);
+    }
+
+    .hero-date {
+      margin-top: 22px;
+      font-size: clamp(20px, 4vw, 30px);
+      letter-spacing: 5px;
+      text-transform: uppercase;
+    }
+
+    .scroll-note {
+      margin-top: 32px;
+      font-size: 14px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      animation: float 2s ease-in-out infinite;
+    }
+
+    /* SECTIONS */
+
+    section {
+      padding: 95px 24px;
+      text-align: center;
+    }
+
+    .section-inner {
+      width: min(100%, 850px);
+      margin: auto;
+    }
+
+    .small-heading {
+      color: var(--gold);
+      font-size: 15px;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    h2 {
+      font-family: "Italiana", serif;
+      font-size: clamp(38px, 8vw, 62px);
+      font-weight: 400;
+      margin-bottom: 28px;
+    }
+
+    .intro p,
+    .details p,
+    .rsvp p {
+      font-size: clamp(20px, 4vw, 25px);
+      line-height: 1.7;
+    }
+
+    .divider {
+      width: 90px;
+      height: 1px;
+      background: var(--gold);
+      margin: 30px auto;
+    }
+
+    /* COUNTDOWN */
+
+    .countdown-section {
+      background: var(--soft-cream);
+    }
+
+    .countdown {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 35px;
+    }
+
+    .countdown-box {
+      padding: 24px 8px;
+      border: 1px solid rgba(183,147,85,.45);
+      background: rgba(255,255,255,.45);
+    }
+
+    .countdown-number {
+      display: block;
+      font-family: "Italiana", serif;
+      font-size: clamp(30px, 7vw, 52px);
+      color: var(--gold);
+    }
+
+    .countdown-label {
+      display: block;
+      margin-top: 8px;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    /* DETAILS */
+
+    .details-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 28px;
+      margin-top: 45px;
+    }
+
+    .detail-card {
+      border: 1px solid rgba(183,147,85,.4);
+      padding: 38px 24px;
+      background: white;
+    }
+
+    .detail-card h3 {
+      font-family: "Italiana", serif;
+      font-size: 28px;
+      font-weight: 400;
+      margin-bottom: 15px;
+    }
+
+    .detail-card p {
+      font-size: 19px;
+      line-height: 1.6;
+    }
+
+    /* QUOTE */
+
+    .quote-section {
+      min-height: 65svh;
+      display: flex;
+      align-items: center;
+      color: white;
+      background:
+        linear-gradient(rgba(0,0,0,.45), rgba(0,0,0,.45)),
+        url("cover.jpg") center/cover fixed;
+    }
+
+    .quote-section blockquote {
+      font-family: "Parisienne", cursive;
+      font-size: clamp(40px, 9vw, 75px);
+      line-height: 1.25;
+    }
+
+    /* RSVP */
+
+    .rsvp {
+      background: var(--brown);
+      color: white;
+    }
+
+    .rsvp .small-heading {
+      color: #d9bc84;
+    }
+
+    .rsvp-button {
+      display: inline-block;
+      margin-top: 30px;
+      padding: 16px 38px;
+      color: white;
+      border: 1px solid #d9bc84;
+      text-decoration: none;
+      font-size: 18px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      transition: .3s ease;
+    }
+
+    .rsvp-button:hover {
+      background: #d9bc84;
+      color: var(--brown);
+    }
+
+    footer {
+      background: #31251f;
+      color: white;
+      padding: 42px 20px;
+      text-align: center;
+      letter-spacing: 2px;
+    }
+
+    footer .footer-names {
+      font-family: "Parisienne", cursive;
+      font-size: 38px;
+      letter-spacing: 0;
+      margin-bottom: 8px;
+    }
+
+    /* MUSIC BUTTON */
+
+    #musicButton {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 500;
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      border: none;
+      background: var(--gold);
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+      box-shadow: 0 8px 25px rgba(0,0,0,.25);
+      display: none;
+    }
+
+    #musicButton.visible {
+      display: block;
+    }
+
+    /* ANIMATIONS */
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(35px);
+      transition: opacity .9s ease, transform .9s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(8px);
+      }
+    }
+
+    @media (max-width: 650px) {
+      .details-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .countdown {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .quote-section {
+        background-attachment: scroll;
+      }
+    }
+  </style>
+</head>
+
+<body class="invitation-closed">
+
+  <!-- OPENING INVITATION SCREEN -->
+
+  <div id="openingScreen">
+    <div class="opening-card">
+      <div class="monogram">A&G</div>
+
+      <!-- CHANGE THIS -->
+      <h1>Alanis & Gershom</h1>
+
+      <p>Invite you to celebrate</p>
+
+      <button class="open-button" id="openInvitation">
+        Open Invitation
+      </button>
+
+      <span class="sound-note">
+        Tap to open with music
+      </span>
+    </div>
+  </div>
+
+  <!-- Upload your song to GitHub and name it music.mp3 -->
+  <audio id="weddingMusic" loop preload="auto">
+    <source src="music.mp3" type="audio/mpeg">
+  </audio>
+
+  <button id="musicButton" aria-label="Turn music on or off">
+    🔊
+  </button>
+
+  <main>
+
+    <!-- MAIN PHOTO -->
+
+    <section class="hero">
+      <div class="hero-content">
+
+        <p class="eyebrow">Save the date</p>
+
+        <!-- CHANGE THIS -->
+        <h1>Alanis & Gershom</h1>
+
+        <!-- CHANGE THIS -->
+        <p class="hero-date">28 August 2026</p>
+
+        <p class="scroll-note">Scroll to discover ↓</p>
+      </div>
+    </section>
+
+    <!-- INTRODUCTION -->
+
+    <section class="intro">
+      <div class="section-inner reveal">
+
+        <p class="small-heading">Together with our families</p>
+
+        <h2>We’re getting married</h2>
+
+        <div class="divider"></div>
+
+        <p>
+          We would be honoured to have you join us as we celebrate
+          our love and begin the next chapter of our lives together.
+        </p>
+      </div>
+    </section>
+
+    <!-- COUNTDOWN -->
+
+    <section class="countdown-section">
+      <div class="section-inner reveal">
+
+        <p class="small-heading">Counting down</p>
+
+        <h2>Until we say “I do”</h2>
+
+        <div class="countdown">
+          <div class="countdown-box">
+            <span class="countdown-number" id="days">0</span>
+            <span class="countdown-label">Days</span>
+          </div>
+
+          <div class="countdown-box">
+            <span class="countdown-number" id="hours">0</span>
+            <span class="countdown-label">Hours</span>
+          </div>
+
+          <div class="countdown-box">
+            <span class="countdown-number" id="minutes">0</span>
+            <span class="countdown-label">Minutes</span>
+          </div>
+
+          <div class="countdown-box">
+            <span class="countdown-number" id="seconds">0</span>
+            <span class="countdown-label">Seconds</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- WEDDING DETAILS -->
+
+    <section class="details">
+      <div class="section-inner reveal">
+
+        <p class="small-heading">Wedding details</p>
+
+        <h2>Join our celebration</h2>
+
+        <div class="details-grid">
+
+          <article class="detail-card">
+            <h3>Ceremony</h3>
+
+            <!-- CHANGE THIS -->
+            <p>
+              Friday, 28 August 2026<br>
+              Ceremony begins at 3:00 pm<br>
+              Please arrive by 2:30 pm
+            </p>
+          </article>
+
+          <article class="detail-card">
+            <h3>Location</h3>
+
+            <!-- CHANGE THIS -->
+            <p>
+              Garden & Lower Deck<br>
+              91 Stanley Street Wyongah NSW, 2259<br>
+            </p>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ROMANTIC QUOTE -->
+
+    <section class="quote-section">
+      <div class="section-inner reveal">
+        <blockquote>
+          “Forever begins here.”
+        </blockquote>
+      </div>
+    </section>
+
+    <!-- RSVP -->
+
+    <section class="rsvp">
+      <div class="section-inner reveal">
+
+        <p class="small-heading">Kindly respond</p>
+
+        <h2>Will you join us?</h2>
+
+        <p>
+          Please confirm your attendance using the RSVP button below.
+        </p>
+
+        <!--
+          CHANGE THIS:
+          Replace the # with your Google Form RSVP link.
+        -->
+
+        <a class="rsvp-button"
+           href="#"
+           target="_blank"
+           rel="noopener">
+          RSVP
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <p class="footer-names">Alanis & Gershom</p>
+    <p>28 · 08 · 2026</p>
+  </footer>
+
+  <script>
+    const openingScreen = document.getElementById("openingScreen");
+    const openButton = document.getElementById("openInvitation");
+    const music = document.getElementById("weddingMusic");
+    const musicButton = document.getElementById("musicButton");
+
+    let musicPlaying = false;
+
+    openButton.addEventListener("click", async () => {
+      openingScreen.classList.add("hidden");
+      document.body.classList.remove("invitation-closed");
+      musicButton.classList.add("visible");
+
+      try {
+        await music.play();
+        musicPlaying = true;
+        musicButton.textContent = "🔊";
+      } catch (error) {
+        musicPlaying = false;
+        musicButton.textContent = "🔇";
+      }
+    });
+
+    musicButton.addEventListener("click", async () => {
+      if (musicPlaying) {
+        music.pause();
+        musicPlaying = false;
+        musicButton.textContent = "🔇";
+      } else {
+        try {
+          await music.play();
+          musicPlaying = true;
+          musicButton.textContent = "🔊";
+        } catch (error) {
+          musicButton.textContent = "🔇";
+        }
+      }
+    });
+
+    /* CHANGE THIS DATE IF NEEDED:
+       Format is year-month-day and 24-hour time.
+    */
+
+    const weddingDate = new Date("2026-08-28T15:00:00+10:00");
+
+    function updateCountdown() {
+      const now = new Date();
+      const difference = weddingDate - now;
+
+      if (difference <= 0) {
+        document.getElementById("days").textContent = "0";
+        document.getElementById("hours").textContent = "0";
+        document.getElementById("minutes").textContent = "0";
+        document.getElementById("seconds").textContent = "0";
+        return;
+      }
+
+      const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+      const hours = Math.floor(
+        (difference / (1000 * 60 * 60)) % 24
+      );
+      const minutes = Math.floor(
+        (difference / (1000 * 60)) % 60
+      );
+      const seconds = Math.floor(
+        (difference / 1000) % 60
+      );
+
+      document.getElementById("days").textContent = days;
+      document.getElementById("hours").textContent = hours;
+      document.getElementById("minutes").textContent = minutes;
+      document.getElementById("seconds").textContent = seconds;
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+
+    const revealElements = document.querySelectorAll(".reveal");
+
+    const observer = new IntersectionObserver(
+      entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+          }
+        });
+      },
+      {
+        threshold: 0.15
+      }
+    );
+
+    revealElements.forEach(element => {
+      observer.observe(element);
+    });
+  </script>
+
+</body>
+</html>
